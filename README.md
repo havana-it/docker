@@ -1,7 +1,8 @@
-Usage
-=====
+## Usage
 
-## 1) Copy the files in your web application root
+### First run
+
+#### 1) Copy the files in your web application root
 
 ex:
 
@@ -9,7 +10,7 @@ ex:
 $ cp -v {env,docker-compose.yml} /var/www/acme
 ```
 
-## 2) Run [https://docs.docker.com/compose/](docker-compose) to build your stack
+#### 2) Run [docker-compose](https://docs.docker.com/compose/) to build your stack
 
 ```bash
 $ cd /var/www/acme
