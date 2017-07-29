@@ -1,0 +1,16 @@
+nginx:
+    build: ./env/nginx
+    ports:
+        - "8088:80"
+    volumes:
+        - .:/server
+        - ./env/nginx/server.conf:/etc/nginx/conf.d/server.conf
+    links:
+        - fpm
+fpm:
+    build: ./env/fpm
+    volumes:
+        - ./:/server
+        - ./env/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+#    ports:
+#        - "9000:9000"
