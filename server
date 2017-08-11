@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# Server stack starter script
+# Build docker-compose call command-line and runs it
+
+usage() {
+    printf "Usage: %s start|stop [services]\n" $0
+    exit 1
+}
+
+case $1 in
+    start|stop)
+        STACK_DOCKER_CMD=$1
+        shift 1
+        ;;
+    
+    *)
+        usage
+        ;;
+esac
+
+STACK_CMD="docker-compose -f docker-compose.yml"
+
+while [ ! $# -eq 0 ]
+do
+    STACK_CMD="${STACK_CMD} -f env/${1}/docker-compose.yml"
+    shift
+done
+
+STACK_CMD="${STACK_CMD} ${STACK_DOCKER_CMD}"
+
+echo $STACK_CMD
