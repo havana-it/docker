@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# Utility for interactive stack environment config setup
+# 
+# Populate .env file prompting user for custom values,
+# use defaults provided in .dist file if no user input
+#
+
+STACK_ROOT=$(realpath `dirname $0`/../)
+ENV_FILE=.env
+DIST_FILE=${ENV_FILE}.dist
+
+source $STACK_ROOT/$DIST_FILE
+
+for var in $(awk -F "=" '/^[A-Z]/ { printf "%s\n", $1; }' $STACK_ROOT/$DIST_FILE)
+do
+    default_value=${!var}
+    printf "[%s] = ? (%s) " $var $default_value #${!var}
+    read user_value
+    [ -z "$user_value" ] && user_value=$default_value
+        
+    # FIXME Find a way to identify services + copy comment lines
+    # to the distributed file
+    printf "%s=%s\n" $var $user_value >> $STACK_ROOT/$ENV_FILE
+done
+
