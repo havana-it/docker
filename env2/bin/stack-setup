@@ -12,6 +12,10 @@ DIST_FILE=${ENV_FILE}.dist
 
 source $STACK_ROOT/$DIST_FILE
 
+# Create env file upon distributable, only if not present yet
+cp --no-clobber $STACK_ROOT/$DIST_FILE $STACK_ROOT/$ENV_FILE
+
+# Iterate over env variables, interactively allowing value override
 for var in $(awk -F "=" '/^[A-Z]/ { printf "%s\n", $1; }' $STACK_ROOT/$DIST_FILE)
 do
     default_value=${!var}
@@ -19,8 +23,8 @@ do
     read user_value
     [ -z "$user_value" ] && user_value=$default_value
         
-    # FIXME Find a way to identify services + copy comment lines
-    # to the distributed file
-    printf "%s=%s\n" $var $user_value >> $STACK_ROOT/$ENV_FILE
+    # FIXME Find a way to identify services
+    # This would allow for service-related block skipping
+    sed "s/^\(${var}=\).*$/\1$user_value/" $STACK_ROOT/$ENV_FILE
 done
 
