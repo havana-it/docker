@@ -13,9 +13,11 @@ WWW_ROOT=$PWD
 APP_ROOT=$(realpath `basename $0`/../)
 ETC_INIT=$APP_ROOT/etc/init.d/
 
-ENV=$APP_ROOT/$ENV_FILE
+# To allow multiple server stacks, env file MUST
+# reside in WWW_ROOT, not APP_ROOT
+ENV=$WWW_ROOT/$ENV_FILE
 
-[ -f $WWW_ROOT/$ENV_FILE ] && ENV=$WWW_ROOT/$ENV_FILE
+[ -f $ENV ] || $APP_ROOT/server-setup
 
 source $ENV
 
