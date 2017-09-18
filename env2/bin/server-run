@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Script for start/stop/compose commands
+#
+#
+ENV_FILE=.env
+COMPOSE=docker-compose
+
+COMMAND=$1
+shift 1
+
+WWW_ROOT=$PWD
+APP_ROOT=$(realpath `basename $0`/../)
+ETC_INIT=$APP_ROOT/etc/init.d/
+
+ENV=$APP_ROOT/$ENV_FILE
+
+[ -f $WWW_ROOT/$ENV_FILE ] && ENV=$WWW_ROOT/$ENV_FILE
+
+source $ENV
+
+COMPOSE_CALL="$COMPOSE -f $APP_ROOT/docker-compose.yml -p \"`basename $WWW_ROOT`\""
+
+for f in $ETC_INIT/*
+do
+    COMPOSE_CALL="$COMPOSE_CALL -f $f"
+done
+
+echo "Compose call: $COMPOSE_CALL"
+
+case $COMMAND in
+    start)
+    $COMPOSE_CALL up -d
+    ;;
+    stop)
+    $COMPOSE_CALL down
+    ;;
+    compose)
+    $COMPOSE_CALL "$@"
+    ;;
+    *)
+    printf "Unknown command [%s]." $COMMAND
+    exit 1
+    ;;
+esac
+
