@@ -9,3 +9,6 @@ RUN apt-get update && apt-get install -y vim \
    && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i 's#^error_log.*$#error_log /proc/self/fd/2 warn;#' /etc/nginx/nginx.conf
+
+COPY timezone /etc/
+RUN rm /etc/localtime && ln -s /usr/share/zoneinfo/`cat /etc/timezone` /etc/localtime

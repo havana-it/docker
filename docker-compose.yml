@@ -1,5 +1,6 @@
 nginx:
-    build: ./env/nginx
+    build: ./docker
+    dockerfile: dockerfile-nginx
     ports:
         - "8088:80"
     volumes:
@@ -8,7 +9,8 @@ nginx:
     links:
         - fpm
 fpm:
-    build: ./env/fpm
+    build: ./docker
+    dockerfile: dockerfile-fpm
     volumes:
         - ./:/server
         - ./env/fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
